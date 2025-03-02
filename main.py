@@ -1,37 +1,41 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-url = "https://au.gradconnection.com/internships/computer-science/australia/"
+url = "https://au.gradconnection.com/jobs/?page=1"
 
 page = requests.get(url)
 
 soup = BeautifulSoup(page.text, 'lxml')
 
-title = []
+titles = []
+orgs = []
+closing_dates = []
+job_types = []
+job_disciplines = []
 
-for a_tag in soup.find_all('a', {'class': 'box-header-title'}):
-    for h3 in a_tag.find_all('h3'):
-        title.append(h3.text)
+boxes = soup.find_all('div', class_ = 'outer-container')
 
-orgs = soup.find_all('p', {'class': 'box-header-para'})
+for box in boxes:
+    title = box.find('h3').text.strip()
+    org = box.find('p', class_ = 'box-header-para').text.strip()
+    closing_date = box.find('span', class_ = 'closing-in').text.strip()
+    job_type = box.find('p', class_ = 'ellipsis-text-paragraph').text.strip()
 
-orgs_list = []
-for org in orgs:
-    orgs_list.append(org.text)
+    
+    # job_discipline_tag = box.find('div', class_ = 'ellipsis-text-paragraph')
+    # job_discipline = job_discipline_tag.find(text=True, recursive=False).strip()
+
+    titles.append(title)
+    orgs.append(org)
+    closing_dates.append(closing_date)
+    job_types.append(job_type)
+    # job_disciplines.append(job_discipline)
 
 
-closing_dates = soup.find_all('span', {'class': 'closing-in'})
+table = pd.DataFrame({'Title': titles, 'Organisation': orgs, 'Closing Date': closing_dates, 'Job Type': job_types})
 
-date_list = []
-for date in closing_dates:
-    date_list.append(date.text)
-
-table = pd.DataFrame({'Title': title, 'Organisation': orgs_list, 'Closing Date': closing_dates})
-
-# display only first 50 characters of title for now
 table['Title'] = table['Title'].str[:50]
 
 print(table)
-
 
 
