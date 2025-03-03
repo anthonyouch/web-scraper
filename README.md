@@ -17,7 +17,7 @@ And as a student, I want to search for internships so that I can find opportunit
 - Should project should cover all types of internships (e.g., engineering, computer science, etc.).?
 
 ## Demo Product
-- This is a demo product that scrapes Gradconnect for CS internships (only the first page).
+- This is a demo product that scrapes Gradconnect for all jobs.
    - Install the required packages using pip:
      ```bash
      pip install beautifulsoup4 requests pandas lxml
@@ -27,4 +27,4 @@ And as a student, I want to search for internships so that I can find opportunit
      python main.py
      ```
 Output: 
-![image](https://github.com/user-attachments/assets/48a997b7-2bae-42fb-9d0a-c377c1260217)
+CSV File 
